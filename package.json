@@ -1,0 +1,25 @@
+{
+  "name": "repos",
+  "version": "0.1.0",
+  "description": "repos",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firstandthird/repos.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/firstandthird/repos/issues"
+  },
+  "homepage": "https://github.com/firstandthird/repos",
+  "dependencies": {
+    "request": "~2.34.0",
+    "async": "^0.2.10",
+    "parse-link-header": "^0.1.0",
+    "aug": "^0.1.0"
+  }
+}
