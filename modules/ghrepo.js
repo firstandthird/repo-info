@@ -99,11 +99,11 @@ GHRepo.prototype = {
           var arr = file.path.split('/');
           var tmp = self.data.files;
 
-          for (var i=0,n=arr.length; i<n; i++){
+          for (var i = 0,length = arr.length; i< length; i++){
             if (typeof tmp[arr[i]] === "undefined"){
               tmp[arr[i]]={};
-              tmp = tmp[arr[i]];
             }
+            tmp = tmp[arr[i]];
           }
           if (file.type !== 'tree'){
             tmp.size = file.size;
