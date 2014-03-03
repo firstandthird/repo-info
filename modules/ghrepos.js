@@ -36,7 +36,8 @@ exports.getRepos = function (obj, callback) {
             endpoints: {
               tags: repo.tags_url,
               branches: repo.branches_url.replace('{/branch}',''),
-              files: repo.trees_url.replace('{/sha}','/')
+              files: repo.trees_url.replace('{/sha}','/'),
+              content: repo.contents_url.replace('{+path}','')
             },
             isPrivate: repo.private,
             isFork: repo.fork,
@@ -66,6 +67,7 @@ exports.getRepos = function (obj, callback) {
 
     var fetchData = function(url){
       request({
+        json: true,
         url: url,
         token: obj.token
       }, function (err, response, body) {

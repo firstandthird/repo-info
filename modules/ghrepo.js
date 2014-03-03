@@ -35,6 +35,7 @@ GHRepo.prototype = {
     var self = this;
 
     request({
+      json: true,
       url: this.data.endpoints.branches,
       token: this.data.token
     }, function (err, response, branches) {
@@ -60,6 +61,7 @@ GHRepo.prototype = {
     var self = this;
 
     request({
+      json: true,
       url: this.data.endpoints.tags,
       token: this.data.token
     }, function (err, response, tags) {
@@ -86,6 +88,7 @@ GHRepo.prototype = {
     var self = this;
 
     request({
+      json: true,
       url: this.data.endpoints.files + this.data.lastSHA + '?recursive=1',
       token: this.data.token
     }, function (err, response, result) {
@@ -116,17 +119,28 @@ GHRepo.prototype = {
       }
     });
   },
-  getTree: function (tree) {
-    tree.forEach(function(file){
-      var name = file.path;
+  getFile: function (path, callback) {
+    var options = {
+      url: this.data.endpoints.content + path,
+      json: true,
+      token: this.token
+    };
 
-      if(file.type !== "tree"){
-
+    request(options, function (err, response, body) {
+      if (err){
+        callback(err);
       }
       else {
-
+        var content = new Buffer(body.content,'base64').toString('utf8');
+        if (path.indexOf('.json') !== -1){
+          content = JSON.parse(content);
+        }
+        callback(null,content);
       }
     });
+  },
+  hasBranch: function (branch) {
+    return typeof this.data.branches[branch] !== "undefined";
   }
 };
 

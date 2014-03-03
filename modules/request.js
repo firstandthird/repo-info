@@ -1,6 +1,7 @@
 "use strict";
 
 var cache = {},
+    aug = require('aug'),
     parseLinks = require('parse-link-header'),
     request = require('request');
 
@@ -16,18 +17,24 @@ var addTokenToURL = function (token, url) {
   return url;
 };
 
+var defaults = {
+  headers: {
+    'User-Agent': 'repos-First-Third'
+  }
+};
+
 var doRequest = function(opt, callback){
   if (typeof cache[opt.url] === "undefined"){
     console.log('Doing request to %s', opt.url);
-    var url = addTokenToURL(opt.token,opt.url);
+    var url = addTokenToURL(opt.token,opt.url),
+        options = {
+          url : url,
+          json : !!opt.json
+        };
 
-    request.get({
-      url: url,
-      json: true,
-      headers: {
-        'User-Agent': 'repos-First-Third'
-      }
-    }, function(err, response, body){
+    options = aug({},defaults,options);
+
+    request.get(options, function(err, response, body){
       if (!err){
         cache[url] = {
           response : response,

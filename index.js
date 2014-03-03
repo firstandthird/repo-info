@@ -12,7 +12,6 @@ if (!options.token){
 }
 
 ghRepos.getRepos(options, function (error, repos) {
-
   // Debugging
   var fs = require('fs');
   var outputFilename = 'tmp/repos.json';
