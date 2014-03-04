@@ -98,22 +98,23 @@ GHRepo.prototype = {
       else {
         self.data.files = {};
 
-        result.tree.forEach(function (file) {
-          var arr = file.path.split('/');
-          var tmp = self.data.files;
+        if (result.tree){
+          result.tree.forEach(function (file) {
+            var arr = file.path.split('/');
+            var tmp = self.data.files;
 
-          for (var i = 0,length = arr.length; i< length; i++){
-            if (typeof tmp[arr[i]] === "undefined"){
-              tmp[arr[i]]={};
+            for (var i = 0,length = arr.length; i< length; i++){
+              if (typeof tmp[arr[i]] === "undefined"){
+                tmp[arr[i]]={};
+              }
+              tmp = tmp[arr[i]];
             }
-            tmp = tmp[arr[i]];
-          }
-          if (file.type !== 'tree'){
-            tmp.size = file.size;
-            tmp.path = file.path;
-            //TODO: Add url to fetch the file here
-          }
-        });
+            if (file.type !== 'tree'){
+              tmp.size = file.size;
+              tmp.path = file.path;
+            }
+          });
+        }
 
         callback(null, self.data.files);
       }
