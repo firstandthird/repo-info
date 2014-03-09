@@ -18,16 +18,14 @@ module.exports = function (repo, rules, callback) {
       console.warn('The rule %s has already been ran. This will be skipped', rule);
       return;
     }
-    else {
-      (function (rule) {
-        batch.push(function (callback) {
-          ruleList[rule].run(repo, function (err, result) {
-            callback(err,result);
-            results[rule] = result;
-          })
+    (function (rule) {
+      batch.push(function (callback) {
+        ruleList[rule].run(repo, function (err, result) {
+          results[rule] = result;
+          callback(err,result);
         });
-      })(rule);
-    }
+      });
+    })(rule);
   });
 
   async.parallel(batch, function (err) {

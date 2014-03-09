@@ -14,28 +14,37 @@ if (!options.token){
 }
 
 ghRepos.getRepos(options, function (error, repos) {
-  var rulesResults = {};
+  var rulesResults = {}, batch = [];
 
   for (var repo in repos) {
     if(repos.hasOwnProperty(repo)){
-      (function (repo) {
-        rules(repos[repo], ['version'], function (err, result) {
-          rulesResults[repo] = result;
+      (function (repo){
+        batch.push(function(callback) {
+          rules(repos[repo], ['version', 'hasGithubPage', 'usesBower', 'numberOfPR'], function (err, result) {
+            rulesResults[repo] = result;
+            callback(err,result);
+          });
         });
       })(repo);
     }
   }
 
-  // Debugging
-  var fs = require('fs');
-  var outputFilename = 'tmp/repos.json';
+  async.parallel(batch, function (err) {
+    if (err){
+      console.error(err);
+    }
+    else {
+      // Debugging
+      var fs = require('fs');
+      var outputFilename = 'tmp/repos.json';
 
-  fs.writeFile(outputFilename, JSON.stringify(rulesResults, null, 4), function(err) {
-    if(err) {
-      console.log(err);
-    } else {
-      console.log("JSON saved to " + outputFilename);
+      fs.writeFile(outputFilename, JSON.stringify(rulesResults, null, 4), function(err) {
+        if(err) {
+          console.log(err);
+        } else {
+          console.log("JSON saved to " + outputFilename);
+        }
+      });
     }
   });
-  //console.log(repos);
 });

@@ -115,7 +115,7 @@ GHRepo.prototype = {
     var options = {
       url: this.data.endpoints.content + path,
       json: true,
-      token: this.token
+      token: this.data.token
     };
 
     request(options, function (err, response, body) {

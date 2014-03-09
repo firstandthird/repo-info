@@ -44,7 +44,6 @@ var doRequest = function(opt, callback){
       if (response.headers.link){
         response.headers.link = parseLinks(response.headers.link);
       }
-
       callback(err,response,body);
     });
   }

@@ -37,7 +37,8 @@ exports.getRepos = function (obj, callback) {
               tags: repo.tags_url,
               branches: repo.branches_url.replace('{/branch}',''),
               files: repo.trees_url.replace('{/sha}','/'),
-              content: repo.contents_url.replace('{+path}','')
+              content: repo.contents_url.replace('{+path}',''),
+              pullRequests: repo.pulls_url.replace('{/number}','')
             },
             isPrivate: repo.private,
             isFork: repo.fork,
@@ -51,6 +52,7 @@ exports.getRepos = function (obj, callback) {
             language: repo.language,
             homepage: repo.homepage,
             hasIssues: repo.has_issues,
+            openIssues: repo.open_issues,
             hasDownloads: repo.has_downloads,
             hasWiki: repo.has_wiki
           });
