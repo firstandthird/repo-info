@@ -20,7 +20,7 @@ ghRepos.getRepos(options, function (error, repos) {
     if(repos.hasOwnProperty(repo)){
       (function (repo){
         batch.push(function(callback) {
-          rules(repos[repo], ['version', 'hasGithubPage', 'usesBower', 'numberOfPR'], function (err, result) {
+          rules(repos[repo], ['version', 'hasGithubPage', 'usesBower', 'isPublishedToNPM'], function (err, result) {
             rulesResults[repo] = result;
             callback(err,result);
           });

@@ -3,7 +3,7 @@ var Rule = require('../modules/rule'),
 
 module.exports = new Rule(function(repo, callback) {
   var options = {
-    url: repo.data.endpoints.pullRequests,
+    url: repo.data.endpoints.commits,
     json: true,
     token: repo.data.token
   };
@@ -13,7 +13,14 @@ module.exports = new Rule(function(repo, callback) {
       callback(err,null);
     }
     else {
-      callback(null,body.length || 0);
+      var lastCommit = {};
+      if (Array.isArray(body)){
+        lastCommit = body[0];
+      }
+      else {
+        lastCommit = 'Not found';
+      }
+      callback(null,lastCommit);
     }
   });
 });

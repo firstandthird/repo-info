@@ -112,6 +112,8 @@ GHRepo.prototype = {
     });
   },
   getFile: function (path, callback) {
+    var self = this;
+
     var options = {
       url: this.data.endpoints.content + path,
       json: true,
@@ -125,7 +127,13 @@ GHRepo.prototype = {
       else {
         var content = new Buffer(body.content,'base64').toString('utf8');
         if (path.indexOf('.json') !== -1){
-          content = JSON.parse(content);
+          try {
+            content = JSON.parse(content);
+          }
+          catch (e){
+            console.warn('JSON for file %s on %s is not valid!', path, self.data.name);
+            content = {};
+          }
         }
         callback(null,content);
       }
