@@ -15,23 +15,23 @@ GHRepo.prototype = {
     // the ability to get the full repo tree in one single request
     async.parallel([
       function (callback) {
-        self.getBranches.call(self, callback);
+        self._fetchBranches.call(self, callback);
       },
       function (callback) {
-        self.getTags.call(self, callback);
+        self._fetchTags.call(self, callback);
       }
     ], function (err, result) {
       if (err){
         cb(err);
       }
       else {
-        self.getFiles(function (err, results) {
+        self._fetchFiles(function (err, results) {
           cb(err,results);
         });
       }
     })
   },
-  getBranches : function (callback) {
+  _fetchBranches : function (callback) {
     var self = this;
 
     request({
@@ -57,7 +57,7 @@ GHRepo.prototype = {
     });
 
   },
-  getTags: function (callback) {
+  _fetchTags: function (callback) {
     var self = this;
 
     request({
@@ -84,7 +84,7 @@ GHRepo.prototype = {
       }
     });
   },
-  getFiles: function (callback) {
+  _fetchFiles: function (callback) {
     var self = this;
 
     request({
@@ -100,19 +100,10 @@ GHRepo.prototype = {
 
         if (result.tree){
           result.tree.forEach(function (file) {
-            var arr = file.path.split('/');
-            var tmp = self.data.files;
-
-            for (var i = 0,length = arr.length; i< length; i++){
-              if (typeof tmp[arr[i]] === "undefined"){
-                tmp[arr[i]]={};
-              }
-              tmp = tmp[arr[i]];
-            }
-            if (file.type !== 'tree'){
-              tmp.size = file.size;
-              tmp.path = file.path;
-            }
+            self.data.files[file.path] = {
+              path: file.path,
+              size: file.size
+            };
           });
         }
 
@@ -142,6 +133,9 @@ GHRepo.prototype = {
   },
   hasBranch: function (branch) {
     return typeof this.data.branches[branch] !== "undefined";
+  },
+  hasFile: function (path) {
+    return typeof this.data.files[path] !== "undefined";
   }
 };
 
