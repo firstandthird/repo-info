@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/firstandthird/repos",
   "dependencies": {
-    "request": "~2.34.0",
-    "async": "^0.2.10",
-    "parse-link-header": "^0.1.0",
-    "aug": "^0.1.0"
+    "request": "~2.79.0",
+    "async": "^2.1.4",
+    "parse-link-header": "^0.4.1",
+    "aug": "^1.0.1"
   }
 }
